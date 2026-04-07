@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Component
 public class BinanceTask {
@@ -26,6 +27,21 @@ public class BinanceTask {
 
         String symbol = resposta.getSymbol();
         BigDecimal price = new BigDecimal(resposta.getPrice());
+
+        CryptoPrice firstPriceDay = cryptoPriceRepository.findFirstPriceToday(symbol);
+
+        if (firstPriceDay != null) {
+
+            BigDecimal variacao = price
+                    .subtract(firstPriceDay.getPrice())
+                    .divide(firstPriceDay.getPrice(), 6, RoundingMode.HALF_UP)
+                    .multiply(BigDecimal.valueOf(100));
+
+            System.out.println("Variação: % " + variacao);
+
+        } else {
+            System.out.println("Não há registro no dia de hoje, gravando no banco..");
+        }
 
         CryptoPrice entity = new CryptoPrice();
         entity.setSymbol(symbol);
