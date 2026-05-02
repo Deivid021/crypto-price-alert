@@ -17,13 +17,16 @@ public class BinanceTask {
     @Autowired
     private CryptoPriceRepository cryptoPriceRepository;
 
+    @Autowired
+    private EmailService emailService;
+
     private final String URL = "https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT";
 
     RestTemplate restTemplate = new RestTemplate();
 
     @Scheduled(fixedRate = 10000)
     public void executeTask() {
-        BinanceDTO resposta = restTemplate.getForObject(URL, BinanceDTO.class);
+        BinanceDTO resposta =  restTemplate.getForObject(URL, BinanceDTO.class);
 
         String symbol = resposta.getSymbol();
         BigDecimal price = new BigDecimal(resposta.getPrice());
@@ -38,6 +41,7 @@ public class BinanceTask {
                     .multiply(BigDecimal.valueOf(100));
 
             System.out.println("Variação: % " + variacao);
+            emailService.enviar("teste de email" + variacao);
 
         } else {
             System.out.println("Não há registro no dia de hoje, gravando no banco..");
