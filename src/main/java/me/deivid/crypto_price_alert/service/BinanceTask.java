@@ -4,6 +4,7 @@ import me.deivid.crypto_price_alert.model.BinanceDTO;
 import me.deivid.crypto_price_alert.model.CryptoPrice;
 import me.deivid.crypto_price_alert.repository.CryptoPriceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.support.CrudMethodMetadata;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -20,6 +21,9 @@ public class BinanceTask {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private PriceAlertService priceAlertService;
+
     private final String URL = "https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT";
 
     RestTemplate restTemplate = new RestTemplate();
@@ -35,10 +39,8 @@ public class BinanceTask {
 
         if (firstPriceDay != null) {
 
-            BigDecimal variacao = price
-                    .subtract(firstPriceDay.getPrice())
-                    .divide(firstPriceDay.getPrice(), 6, RoundingMode.HALF_UP)
-                    .multiply(BigDecimal.valueOf(100));
+           BigDecimal variacao = priceAlertService
+                        .calcularVariacao(firstPriceDay.getPrice(), price);
 
             System.out.println("Variação: % " + variacao);
             emailService.enviar("teste de email" + variacao);
