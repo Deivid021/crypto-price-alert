@@ -1,18 +1,19 @@
 package me.deivid.crypto_price_alert.service;
 
-import me.deivid.crypto_price_alert.model.BinanceDTO;
+import me.deivid.crypto_price_alert.dto.BinanceDTO;
 import me.deivid.crypto_price_alert.model.CryptoPrice;
+import me.deivid.crypto_price_alert.model.UserAlert;
 import me.deivid.crypto_price_alert.repository.CryptoPriceRepository;
+import me.deivid.crypto_price_alert.repository.UserAlertRepository;
+import me.deivid.crypto_price_alert.dto.UserAlertRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.support.CrudMethodMetadata;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.math.BigDecimal;
-import java.math.RoundingMode;
+import java.util.List;
 
 @Component
 public class BinanceTask {
@@ -21,15 +22,21 @@ public class BinanceTask {
     private CryptoPriceRepository cryptoPriceRepository;
 
     @Autowired
+    private UserAlertRepository userAlertRepository;
+
+    @Autowired
     private EmailService emailService;
 
     @Autowired
     private PriceAlertService priceAlertService;
 
+    @Autowired
+    private UserAlertRequestDTO userAlertRequestDTO;
+
     private static final Logger logger =
             LoggerFactory.getLogger(BinanceTask.class);
 
-    private final String URL = "https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT";
+    private String URL = "https://api.binance.com/api/v3/ticker/price?symbol=" + userAlertRequestDTO.getSymbol();
 
     RestTemplate restTemplate = new RestTemplate();
 
@@ -39,6 +46,7 @@ public class BinanceTask {
         logger.info("Iniciando consulta na Binance");
 
         BinanceDTO resposta =  restTemplate.getForObject(URL, BinanceDTO.class);
+        List<UserAlert> alerts = userAlertRepository.findByActiveTrue();
 
         logger.info("Preço recebido: {}", resposta.getPrice());
 
