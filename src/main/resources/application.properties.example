@@ -1,12 +1,12 @@
 spring.application.name=crypto-price-alert
 
-# Dados de conex�o com o banco
-spring.datasource.url=jdbc:postgresql://localhost:sua_porta/seu_banco
-spring.datasource.username=seu_user
-spring.datasource.password=sua_senha
+# Dados de conexão com o banco (valores default do docker-compose.yml / .env.example)
+spring.datasource.url=jdbc:postgresql://localhost:5432/crypto_price_alert
+spring.datasource.username=crypto
+spring.datasource.password=crypto
 spring.datasource.driver-class-name=org.postgresql.Driver
 
-# Configura��es do Hibernate
+# Configurações do Hibernate
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect

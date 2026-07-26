@@ -34,3 +34,7 @@ build/
 
 # Ignorar configurações sensíveis
 src/main/resources/application.properties
+.env
+
+# Configurações locais do Claude Code
+.claude/
