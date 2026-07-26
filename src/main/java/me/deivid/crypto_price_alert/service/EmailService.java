@@ -2,7 +2,6 @@ package me.deivid.crypto_price_alert.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +12,11 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    public void enviar(String mensagem) {
+    public void disparaEmail(String remetente, String destinatario, String mensagem) {
 
         SimpleMailMessage mail = new SimpleMailMessage();
-        mail.setFrom("crypto.alertsmvp@gmail.com");
-        mail.setTo("deividsestrensantos@gmail.com");
+        mail.setFrom(remetente);
+        mail.setTo(destinatario);
         mail.setSubject("Alerta Crypto");
         mail.setText(mensagem);
 

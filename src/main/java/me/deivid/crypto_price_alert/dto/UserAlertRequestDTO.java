@@ -14,4 +14,5 @@ public class UserAlertRequestDTO {
         private BigDecimal priceLimit;
         private AlertType alertType;
 
+        public UserAlertRequestDTO() {}
 }
