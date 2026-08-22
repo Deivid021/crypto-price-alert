@@ -1,10 +1,13 @@
 package me.deivid.crypto_price_alert.service;
 
 import me.deivid.crypto_price_alert.dto.UserAlertRequestDTO;
+import me.deivid.crypto_price_alert.dto.UserAlertResponseDTO;
 import me.deivid.crypto_price_alert.model.UserAlert;
 import me.deivid.crypto_price_alert.repository.UserAlertRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserAlertService {
@@ -22,6 +25,16 @@ public class UserAlertService {
         alert.setAlertType(dto.getAlertType());
 
         return repository.save(alert);
+    }
 
+    public List<UserAlertResponseDTO> listar() {
+
+        List<UserAlert> allUserAlert = repository.findAll();
+
+        List<UserAlertResponseDTO> listaAlert = allUserAlert.stream()
+                .map(UserAlertResponseDTO::from)
+                .toList();
+
+        return listaAlert;
     }
 }
