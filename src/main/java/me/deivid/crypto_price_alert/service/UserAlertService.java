@@ -2,6 +2,7 @@ package me.deivid.crypto_price_alert.service;
 
 import me.deivid.crypto_price_alert.dto.UserAlertRequestDTO;
 import me.deivid.crypto_price_alert.dto.UserAlertResponseDTO;
+import me.deivid.crypto_price_alert.exception.UserAlertNotFoundException;
 import me.deivid.crypto_price_alert.model.UserAlert;
 import me.deivid.crypto_price_alert.repository.UserAlertRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +31,15 @@ public class UserAlertService {
     public List<UserAlertResponseDTO> listar() {
 
         List<UserAlert> allUserAlert = repository.findAll();
+        return allUserAlert.stream()
+                           .map(UserAlertResponseDTO::from)
+                           .toList();
+    }
 
-        List<UserAlertResponseDTO> listaAlert = allUserAlert.stream()
-                .map(UserAlertResponseDTO::from)
-                .toList();
+    public UserAlertResponseDTO findById(Long idUserAlert) {
 
-        return listaAlert;
+        return repository.findById(idUserAlert)
+                         .map(UserAlertResponseDTO::from)
+                         .orElseThrow(() -> new UserAlertNotFoundException(idUserAlert));
     }
 }

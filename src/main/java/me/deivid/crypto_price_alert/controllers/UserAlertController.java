@@ -25,4 +25,10 @@ public class UserAlertController {
     public List<UserAlertResponseDTO> listar() {
         return service.listar();
     }
+
+    @GetMapping("/{id}")
+    public UserAlertResponseDTO findById(@PathVariable("id")Long id){
+        return service.findById(id);
+    }
+
 }
