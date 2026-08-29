@@ -10,7 +10,7 @@ public class UserAlertNotFoundException extends RuntimeException {
     }
 
     public UserAlertNotFoundException(Long id) {
-        super("Não encontrado campo: " + id);
+        super("Não encontrado ID: " + id);
         this.id = id;
     }
 }
