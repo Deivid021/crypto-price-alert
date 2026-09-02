@@ -27,8 +27,13 @@ public class UserAlertController {
     }
 
     @GetMapping("/{id}")
-    public UserAlertResponseDTO findById(@PathVariable("id")Long id){
+    public UserAlertResponseDTO findById(@PathVariable("id")Long id) {
         return service.findById(id);
+    }
+
+    @PutMapping("/{id}")
+    public UserAlert editar(@PathVariable("id") Long id, @RequestBody UserAlertRequestDTO dto){
+        return service.editar(id, dto);
     }
 
 }

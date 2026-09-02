@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserAlertService {
@@ -41,5 +42,19 @@ public class UserAlertService {
         return repository.findById(idUserAlert)
                          .map(UserAlertResponseDTO::from)
                          .orElseThrow(() -> new UserAlertNotFoundException(idUserAlert));
+    }
+
+    public UserAlert editar(Long idUserAlert, UserAlertRequestDTO dto) {
+
+        UserAlert usuarioExiste = repository.findById(idUserAlert)
+                                                       .orElseThrow(() -> new UserAlertNotFoundException(idUserAlert));
+
+        usuarioExiste.setEmail(dto.getEmail());
+        usuarioExiste.setSymbol(dto.getSymbol());
+        usuarioExiste.setAlertType(dto.getAlertType());
+        usuarioExiste.setPriceLimit(dto.getPriceLimit());
+
+        return repository.save(usuarioExiste);
+
     }
 }
