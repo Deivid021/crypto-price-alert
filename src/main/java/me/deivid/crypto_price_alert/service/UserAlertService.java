@@ -1,5 +1,6 @@
 package me.deivid.crypto_price_alert.service;
 
+import jakarta.transaction.Transactional;
 import me.deivid.crypto_price_alert.dto.UserAlertRequestDTO;
 import me.deivid.crypto_price_alert.dto.UserAlertResponseDTO;
 import me.deivid.crypto_price_alert.exception.UserAlertNotFoundException;
@@ -9,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserAlertService {
@@ -56,5 +56,13 @@ public class UserAlertService {
 
         return repository.save(usuarioExiste);
 
+    }
+
+    @Transactional
+    public void excluir(Long idUserAlert) {
+        UserAlert usuarioExiste = repository.findById(idUserAlert)
+                .orElseThrow(() -> new UserAlertNotFoundException(idUserAlert));
+
+        repository.delete(usuarioExiste);
     }
 }

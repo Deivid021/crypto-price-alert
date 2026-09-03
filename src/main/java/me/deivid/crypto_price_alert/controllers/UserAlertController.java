@@ -4,6 +4,7 @@ import me.deivid.crypto_price_alert.dto.UserAlertRequestDTO;
 import me.deivid.crypto_price_alert.dto.UserAlertResponseDTO;
 import me.deivid.crypto_price_alert.service.UserAlertService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import me.deivid.crypto_price_alert.model.UserAlert;
 
@@ -34,6 +35,12 @@ public class UserAlertController {
     @PutMapping("/{id}")
     public UserAlert editar(@PathVariable("id") Long id, @RequestBody UserAlertRequestDTO dto){
         return service.editar(id, dto);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluir(@PathVariable("id") Long id) {
+        service.excluir(id);
+        return ResponseEntity.noContent().build();
     }
 
 }
