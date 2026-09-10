@@ -3,6 +3,7 @@ package me.deivid.crypto_price_alert.service;
 import jakarta.transaction.Transactional;
 import me.deivid.crypto_price_alert.dto.UserAlertRequestDTO;
 import me.deivid.crypto_price_alert.dto.UserAlertResponseDTO;
+import me.deivid.crypto_price_alert.dto.UserAlertStatusDTO;
 import me.deivid.crypto_price_alert.exception.UserAlertNotFoundException;
 import me.deivid.crypto_price_alert.model.UserAlert;
 import me.deivid.crypto_price_alert.repository.UserAlertRepository;
@@ -33,21 +34,21 @@ public class UserAlertService {
 
         List<UserAlert> allUserAlert = repository.findAll();
         return allUserAlert.stream()
-                           .map(UserAlertResponseDTO::from)
-                           .toList();
+                .map(UserAlertResponseDTO::from)
+                .toList();
     }
 
     public UserAlertResponseDTO findById(Long idUserAlert) {
 
         return repository.findById(idUserAlert)
-                         .map(UserAlertResponseDTO::from)
-                         .orElseThrow(() -> new UserAlertNotFoundException(idUserAlert));
+                .map(UserAlertResponseDTO::from)
+                .orElseThrow(() -> new UserAlertNotFoundException(idUserAlert));
     }
 
     public UserAlert editar(Long idUserAlert, UserAlertRequestDTO dto) {
 
         UserAlert usuarioExiste = repository.findById(idUserAlert)
-                                                       .orElseThrow(() -> new UserAlertNotFoundException(idUserAlert));
+                .orElseThrow(() -> new UserAlertNotFoundException(idUserAlert));
 
         usuarioExiste.setEmail(dto.getEmail());
         usuarioExiste.setSymbol(dto.getSymbol());
@@ -64,5 +65,15 @@ public class UserAlertService {
                 .orElseThrow(() -> new UserAlertNotFoundException(idUserAlert));
 
         repository.delete(usuarioExiste);
+    }
+
+    public UserAlert editarStatus(Long idUserAlert, UserAlertStatusDTO dto) {
+
+        UserAlert usuarioExiste = repository.findById(idUserAlert)
+                .orElseThrow(() -> new UserAlertNotFoundException(idUserAlert));
+
+        usuarioExiste.setActive(dto.isActive());
+
+        return repository.save(usuarioExiste);
     }
 }
