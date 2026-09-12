@@ -19,7 +19,7 @@ public class UserAlertController {
     private UserAlertService service;
 
     @PostMapping
-    public UserAlert criar(@RequestBody UserAlertRequestDTO dto) {
+    public UserAlertResponseDTO criar(@RequestBody UserAlertRequestDTO dto) {
         return service.salvar(dto);
     }
 
@@ -34,12 +34,12 @@ public class UserAlertController {
     }
 
     @PutMapping("/{id}")
-    public UserAlert editar(@PathVariable("id") Long id, @RequestBody UserAlertRequestDTO dto){
+    public UserAlertResponseDTO editar(@PathVariable("id") Long id, @RequestBody UserAlertRequestDTO dto){
         return service.editar(id, dto);
     }
 
     @PatchMapping("/{id}")
-    public UserAlert editarStatus(@PathVariable("id") Long id, @RequestBody UserAlertStatusDTO dto) {
+    public UserAlertResponseDTO editarStatus(@PathVariable("id") Long id, @RequestBody UserAlertStatusDTO dto) {
         return service.editarStatus(id, dto);
     }
 

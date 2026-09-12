@@ -7,6 +7,7 @@ import me.deivid.crypto_price_alert.dto.UserAlertStatusDTO;
 import me.deivid.crypto_price_alert.exception.UserAlertNotFoundException;
 import me.deivid.crypto_price_alert.model.UserAlert;
 import me.deivid.crypto_price_alert.repository.UserAlertRepository;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ public class UserAlertService {
     @Autowired
     private UserAlertRepository repository;
 
-    public UserAlert salvar(UserAlertRequestDTO dto) {
+    public UserAlertResponseDTO salvar(UserAlertRequestDTO dto) {
 
         UserAlert alert = new UserAlert();
 
@@ -27,25 +28,27 @@ public class UserAlertService {
         alert.setPriceLimit(dto.getPriceLimit());
         alert.setAlertType(dto.getAlertType());
 
-        return repository.save(alert);
+        UserAlert usuarioSalvo = repository.save(usuarioExiste);
+
+        return new UserAlertResponseDTO(usuarioSalvo);
     }
 
     public List<UserAlertResponseDTO> listar() {
 
         List<UserAlert> allUserAlert = repository.findAll();
         return allUserAlert.stream()
-                .map(UserAlertResponseDTO::from)
+                .map(UserAlertResponseDTO::new)
                 .toList();
     }
 
     public UserAlertResponseDTO findById(Long idUserAlert) {
 
         return repository.findById(idUserAlert)
-                .map(UserAlertResponseDTO::from)
+                .map(UserAlertResponseDTO::new)
                 .orElseThrow(() -> new UserAlertNotFoundException(idUserAlert));
     }
 
-    public UserAlert editar(Long idUserAlert, UserAlertRequestDTO dto) {
+    public UserAlertResponseDTO editar(Long idUserAlert, UserAlertRequestDTO dto) {
 
         UserAlert usuarioExiste = repository.findById(idUserAlert)
                 .orElseThrow(() -> new UserAlertNotFoundException(idUserAlert));
@@ -55,8 +58,9 @@ public class UserAlertService {
         usuarioExiste.setAlertType(dto.getAlertType());
         usuarioExiste.setPriceLimit(dto.getPriceLimit());
 
-        return repository.save(usuarioExiste);
+        UserAlert usuarioSalvo = repository.save(usuarioExiste);
 
+        return new UserAlertResponseDTO(usuarioSalvo);
     }
 
     @Transactional
@@ -67,13 +71,16 @@ public class UserAlertService {
         repository.delete(usuarioExiste);
     }
 
-    public UserAlert editarStatus(Long idUserAlert, UserAlertStatusDTO dto) {
+    @Transactional
+    public UserAlertResponseDTO editarStatus(Long idUserAlert, UserAlertStatusDTO dto) {
 
         UserAlert usuarioExiste = repository.findById(idUserAlert)
                 .orElseThrow(() -> new UserAlertNotFoundException(idUserAlert));
 
         usuarioExiste.setActive(dto.isActive());
 
-        return repository.save(usuarioExiste);
+        UserAlert usuarioSalvo = repository.save(usuarioExiste);
+
+        return new UserAlertResponseDTO(usuarioSalvo);
     }
 }

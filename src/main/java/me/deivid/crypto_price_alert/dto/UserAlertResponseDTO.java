@@ -2,7 +2,6 @@ package me.deivid.crypto_price_alert.dto;
 
 import me.deivid.crypto_price_alert.enums.AlertType;
 import me.deivid.crypto_price_alert.model.UserAlert;
-
 import java.math.BigDecimal;
 
 public record UserAlertResponseDTO(
@@ -13,15 +12,14 @@ public record UserAlertResponseDTO(
         AlertType alertType,
         boolean active
 ) {
-        public static UserAlertResponseDTO from(UserAlert userAlert) {
-
-                return new UserAlertResponseDTO(
-                        userAlert.getId(),
-                        userAlert.getEmail(),
-                        userAlert.getSymbol(),
-                        userAlert.getPriceLimit(),
-                        userAlert.getAlertType(),
-                        userAlert.isActive()
+        public UserAlertResponseDTO(UserAlert entity) {
+                this(
+                        entity.getId(),
+                        entity.getEmail(),
+                        entity.getSymbol(),
+                        entity.getPriceLimit(),
+                        entity.getAlertType(),
+                        entity.isActive()
                 );
         }
 }
