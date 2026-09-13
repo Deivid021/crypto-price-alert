@@ -7,7 +7,6 @@ import me.deivid.crypto_price_alert.dto.UserAlertStatusDTO;
 import me.deivid.crypto_price_alert.exception.UserAlertNotFoundException;
 import me.deivid.crypto_price_alert.model.UserAlert;
 import me.deivid.crypto_price_alert.repository.UserAlertRepository;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +27,7 @@ public class UserAlertService {
         alert.setPriceLimit(dto.getPriceLimit());
         alert.setAlertType(dto.getAlertType());
 
-        UserAlert usuarioSalvo = repository.save(usuarioExiste);
+        UserAlert usuarioSalvo = repository.save(alert);
 
         return new UserAlertResponseDTO(usuarioSalvo);
     }
@@ -48,6 +47,7 @@ public class UserAlertService {
                 .orElseThrow(() -> new UserAlertNotFoundException(idUserAlert));
     }
 
+    @Transactional
     public UserAlertResponseDTO editar(Long idUserAlert, UserAlertRequestDTO dto) {
 
         UserAlert usuarioExiste = repository.findById(idUserAlert)
