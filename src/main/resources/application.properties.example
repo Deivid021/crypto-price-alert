@@ -19,3 +19,6 @@ spring.mail.password=SUA SENHA
 
 spring.mail.properties.mail.smtp.auth=true
 spring.mail.properties.mail.smtp.starttls.enable=true
+
+spring.data.redis.host=localhost
+spring.data.redis.port=6379
